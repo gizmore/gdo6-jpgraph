@@ -40,4 +40,10 @@ final class Module_JPGraph extends GDO_Module
 		$path = $this->jpgraphPath() . "/$path";
 		require_once $path;
 	}
+	
+	public function onIncludeScripts()
+	{
+		$this->addJavascript('js/gdo-jpgraph.js');
+	}
+
 }
