@@ -41,6 +41,11 @@ final class Module_JPGraph extends GDO_Module
 		require_once $path;
 	}
 	
+	public function onLoadLanguage()
+	{
+		return $this->loadLanguage('lang/jpgraph');
+	}
+	
 	public function onIncludeScripts()
 	{
 		$this->addJavascript('js/gdo-jpgraph.js');

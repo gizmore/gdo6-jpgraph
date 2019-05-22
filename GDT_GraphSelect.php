@@ -37,7 +37,21 @@ class GDT_GraphSelect extends GDT
 		);
 		return GDT_Template::php('JPGraph', 'graph_select.php', $tVars);
 	}
-
+	
+	public $withToday = true;
+	public function withToday($withToday=true)
+	{
+		$this->withToday = $withToday;
+		return $this;
+	}
+	
+	public $withYesterday = true;
+	public function withYesterday($withYesterday=true)
+	{
+		$this->withYesterday = $withYesterday;
+		return $this;
+	}
+	
 	############
 	### HREF ###
 	############

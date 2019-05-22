@@ -1,16 +1,18 @@
 <?php
+use GDO\JPGraph\GDT_GraphDateselect;
+
 /**
  * @var $gdt \GDO\JPGraph\GDT_GraphSelect
  */
 $method = $gdt->graphMethod;
 ?>
-<div class="gdo-jpgraph">
-<select onchange="GDO.JPGraph.changeGraph('<?=$gdt->id()?>', this.value)">
-  <option value="last_7">7 Tage</option>
-  <option value="last_week">Letzte Woche</option>
-  <option value="last_month">Letzter Monat</option>
-  <option value="this_quart">Dieses Quartal</option>
-  <option value="last_quart">Letztes Quartal</option>
-</select>
-<img <?=$gdt->htmlID()?> src="<?=$gdt->hrefImage()?>" />
-</div>
+<form <?=$gdt->htmlID()?> class="gdt-graph-select">
+  <div class="gdo-jpgraph">
+    <div class="gdo-jpgraph-selection">
+      <?php echo GDT_GraphDateselect::make('date')->withToday(false)->withYesterday(false)->initial('7days')->render(); ?>
+      <input type="date" name="start" />
+      <input type="date" name="end" />
+    </div>
+    <img src="<?=$gdt->hrefImage()?>" />
+  </div>
+</form>
