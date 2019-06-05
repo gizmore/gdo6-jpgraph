@@ -36,6 +36,8 @@ window.GDO.JPGraph = {
 		src = src.replace(/date=[^&]*/, newDate);
 		src = src.replace(/start=[^&]*/, newStart);
 		src = src.replace(/end=[^&]*/, newEnd);
+		src = src.replace(/&t=[0-9]+/, '');
+		
 		
 		// Invalid custom date abort
 		if (sel.val() === 'custom') {
@@ -43,6 +45,7 @@ window.GDO.JPGraph = {
 				return;
 			}
 		}
+		src += '&t='+(new Date().getTime());
 		console.log(src);
 		img.attr('src', src);
 	},

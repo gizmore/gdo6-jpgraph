@@ -9,6 +9,7 @@ use GDO\UI\WithTitle;
 use Amenadiel\JpGraph\Graph\Graph;
 use Amenadiel\JpGraph\Text\Text;
 use Amenadiel\JpGraph\Plot\LinePlot;
+use GDO\Util\Strings;
 
 /**
  * Render a graph.
@@ -152,6 +153,93 @@ abstract class MethodGraph extends Method
 		
 		$graph->Stroke();
 		die();
+	}
+	
+	/**
+	 * 
+	 * @param array $datax
+	 * @return array
+	 */
+	protected function filterXAxisDaily(array &$datax)
+	{
+		# Remove last entry
+		end($datax);
+		$key = key($datax);
+		$datax[$key] = '';
+		reset($datax);
+		
+		# Remove year if always equal
+		$years = [];
+		foreach ($datax as $k => $day)
+		{
+			if ($year = Strings::substrTo($day, '-'))
+			{
+				$years[$year] = $year;
+			}
+		}
+		if (count($years) === 1)
+		{
+			foreach ($datax as $k => $day)
+			{
+				$datax[$k] = Strings::substrFrom($day, '-', '');
+			}
+		}
+	
+		# Remove month if always equal
+		$months = [];
+		if (count($years) === 1)
+		{
+			foreach ($datax as $k => $day)
+			{
+				if ($month = Strings::substrTo($day, '-'))
+				{
+					$months[$month] = $month;
+				}
+			}
+			if (count($months) === 1)
+			{
+				foreach ($datax as $k => $day)
+				{
+					$datax[$k] = Strings::substrFrom($day, '-', '');
+				}
+			}
+			
+		}
+		
+		# Translate
+		foreach ($datax as $k => $day)
+		{
+			switch (strlen($day))
+			{
+				case 2: $datax[$k] = Time::displayDate($k, 'jpgraph_datefmt_2'); break;
+				case 5: $datax[$k] = Time::displayDate($k, 'jpgraph_datefmt_5'); break;
+				case 10: $datax[$k] = Time::displayDate($k, 'jpgraph_datefmt_10'); break;
+			}
+		}
+		
+		# Remove too much labels
+		$len = count($datax) - 1;
+		$w = $this->getWidth();
+		$ppd = $w / $len;
+		$wanted = 24; # We want 24px per tick label
+		if ($ppd < $wanted)
+		{
+			$i = 0;
+			$keepEvery = round($wanted / $ppd);
+			foreach ($datax as $k => $day)
+			{
+				if ($i > 0)
+				{
+					if ($i % $keepEvery)
+					{
+						$datax[$k] = '';
+					}
+				}
+				$i++;
+			}
+		}
+		
+		return array_values($datax);
 	}
 	
 }
