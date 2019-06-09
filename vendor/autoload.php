@@ -10,8 +10,15 @@ spl_autoload_register(function($classname) {
 	# JPGraph basedir
 	$baseDir = dirname(__DIR__) . '/jpgraph/src/';
 	
+	# Check for package
 	if ($classname = Strings::substrFrom($classname, "Amenadiel\\JpGraph\\"))
 	{
+		# Linux is case sensitive and does not like backslash
+		$classname = str_replace("\\", '/', $classname);
+		$classname = strtolower(Strings::rsubstrTo($classname, '/')) . '/' . 
+			Strings::rsubstrFrom($classname, '/');
+		
+		# include it!
 		$file = $baseDir . $classname . '.php';
 		if (is_file($file))
 		{
