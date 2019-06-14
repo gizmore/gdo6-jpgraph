@@ -25,9 +25,11 @@ window.GDO.JPGraph = {
 
 	renderImageFor: function(form) {
 		console.log('GDO.JPGraph.renderImageFor()', form);
+		
+		var sel = form.find('select');
+
 		var img = form.find('img');
 		var src = img.attr('src');
-		var sel = form.find('select');
 		var start = form.find('input[name=start]');
 		var newStart = "start="+start.val();
 		var end = form.find('input[name=end]');
@@ -36,8 +38,7 @@ window.GDO.JPGraph = {
 		src = src.replace(/date=[^&]*/, newDate);
 		src = src.replace(/start=[^&]*/, newStart);
 		src = src.replace(/end=[^&]*/, newEnd);
-		src = src.replace(/&t=[0-9]+/, '');
-		
+		src = src.replace(/&t=[0-9]+/, '') + '&t='+(new Date().getTime());
 		
 		// Invalid custom date abort
 		if (sel.val() === 'custom') {
@@ -45,7 +46,12 @@ window.GDO.JPGraph = {
 				return;
 			}
 		}
-		src += '&t='+(new Date().getTime());
+		
+		// Please select abort
+		if (sel.val() === '0') {
+			return;
+		}
+
 		console.log(src);
 		img.attr('src', src);
 	},
