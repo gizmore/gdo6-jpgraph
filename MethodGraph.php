@@ -218,14 +218,10 @@ abstract class MethodGraph extends Method
 		}
 		
 		# Remove too much labels
-		$len = count($datax) - 1;
-		$w = $this->getWidth();
-		$ppd = $w / $len;
-		$wanted = 24; # We want 24px per tick label
-		if ($ppd < $wanted)
+		$keepEvery = $this->keepEveryNthTick($datax);
+		if ($keepEvery > 1)
 		{
 			$i = 0;
-			$keepEvery = round($wanted / $ppd);
 			foreach ($datax as $k => $day)
 			{
 				if ($i > 0)
@@ -240,6 +236,24 @@ abstract class MethodGraph extends Method
 		}
 		
 		return array_values($datax);
+	}
+	
+	/**
+	 * Calucalte N for keep every n-th tick.
+	 * @param array $datax
+	 * @return int
+	 */
+	protected function keepEveryNthTick(array $datax)
+	{
+		$len = count($datax) - 1;
+		$w = $this->getWidth();
+		$ppd = $w / $len;
+		$wanted = 24; # We want 24px per tick label
+		if ($ppd < $wanted)
+		{
+			return round($wanted / $ppd);
+		}
+		return 1;
 	}
 	
 }
