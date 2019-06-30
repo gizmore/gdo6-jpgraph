@@ -52,6 +52,13 @@ class GDT_GraphSelect extends GDT
 		return $this;
 	}
 	
+	public $withoutDateInput = false;
+	public function withoutDateInput($withoutDateInput=true)
+	{
+		$this->withoutDateInput = $withoutDateInput;
+		return $this;
+	}
+	
 	############
 	### HREF ###
 	############
