@@ -4,13 +4,20 @@ namespace GDO\JPGraph;
 use GDO\Form\GDT_Select;
 use GDO\Date\Time;
 
+/**
+ * A simple select for timeframes for a graph.
+ * This year, last year, yesterday, last month, etc.
+ * Converts these options to start- and endtime.
+ *  
+ * @author gizmore
+ * 
+ * @since 6.09
+ * @version 6.09
+ * 
+ * @see Time
+ */
 final class GDT_GraphDateselect extends GDT_Select
 {
-	public function __construct()
-	{
-		$this->initChoices();
-	}
-	
 	public function initChoices()
 	{
 		$this->emptyLabel(t('jpgraphsel_0'));
@@ -33,7 +40,8 @@ final class GDT_GraphDateselect extends GDT_Select
 		$choices['last_month'] = t('jpgraphsel_last_month');
 		$choices['this_quartal'] = t('jpgraphsel_this_quartal');
 		$choices['last_quartal'] = t('jpgraphsel_last_quartal');
-		
+		$choices['this_year'] = t('jpgraphsel_this_year');
+		$choices['last_year'] = t('jpgraphsel_last_year');
 		
 		return $this->choices($choices);
 	}
@@ -42,6 +50,17 @@ final class GDT_GraphDateselect extends GDT_Select
 	{
 		$this->initChoices();
 		return parent::renderCell();
+	}
+	
+	public function renderForm()
+	{
+		return $this->renderCell();
+	}
+	
+	public function validate($value)
+	{
+		$this->initChoices();
+		return parent::validate($value);
 	}
 	
 	################
@@ -103,14 +122,21 @@ final class GDT_GraphDateselect extends GDT_Select
 				$m++;
 				if ($m === 1)
 				{
-					$m = 10;
+					$m = 9;
 					$y--;
 				}
 				else
 				{
 					$m -= 3;
 				}
-				return mktime(0, 0, 0, $m, 1, $y);
+				$m -= $m % 3;
+				return mktime(0, 0, 0, $m+1, 1, $y);
+			case 'this_year':
+				return mktime(0, 0, 0, 1, 1);
+			case 'last_year':
+				$y = intval(date('y'), 10);
+				return mktime(0, 0, 0, 1, 1, $y-1);
+				
 		}
 	}
 	
@@ -122,6 +148,7 @@ final class GDT_GraphDateselect extends GDT_Select
 	public function getEndTime()
 	{
 		$now = time();
+		
 		switch ($this->getValue())
 		{
 			case 'today':return $now;
@@ -138,18 +165,17 @@ final class GDT_GraphDateselect extends GDT_Select
 			case 'last_quartal':
 				$y = intval(date('y'), 10);
 				$m = intval(date('m'), 10) - 1;
-				$m -= $m % 4;
-				$m++;
-				if ($m === 1)
+				if ($m <= 3)
 				{
-					$m = 10;
-					$y--;
+					return mktime(23, 59, 59, 12, 31, $y-1);
 				}
-				else
-				{
-					$m -= 3;
-				}
-				return mktime(23, 59, 59, $m+1, 31, $y);
+				$m -= $m % 3;
+				return mktime(0, 0, 0, $m+1, 1, $y) - 1;
+			case 'this_year':
+				return $now;
+			case 'last_year':
+				$y = intval(date('y'), 10);
+				return mktime(23, 59, 59, 12, 31, $y-1);
 		}
 	}
 	

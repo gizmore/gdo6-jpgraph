@@ -18,12 +18,15 @@ use GDO\Util\Strings;
 abstract class MethodGraph extends Method
 {
 	use WithTitle;
-
+	
+	public function defaultWidth() { return Module_JPGraph::instance()->cfgDefaultWidth(); }
+	public function defaultHeight() { return Module_JPGraph::instance()->cfgDefaultHeight(); }
+	
 	public function gdoParameters()
 	{
 		return array(
-			GDT_UInt::make('width')->min(48)->max(1024)->initial(640),
-			GDT_UInt::make('height')->min(32)->max(1024)->initial(480),
+			GDT_UInt::make('width')->min(48)->max(1024)->initial($this->defaultWidth()),
+			GDT_UInt::make('height')->min(32)->max(1024)->initial($this->defaultHeight()),
 			GDT_GraphDateselect::make('date')->initial('7days'),
 			GDT_DateTime::make('start')->initial(Time::getDate(time()-Time::ONE_WEEK)),
 			GDT_DateTime::make('end')->initial(Time::getDate()),
@@ -156,7 +159,9 @@ abstract class MethodGraph extends Method
 	}
 	
 	/**
-	 * 
+	 * Format the date axis nicely.
+	 * Remove too much ticks.
+	 * Remove redundant date metrics like year or month, if they are always the same.
 	 * @param array $datax
 	 * @return array
 	 */
@@ -209,11 +214,9 @@ abstract class MethodGraph extends Method
 		# Translate
 		foreach ($datax as $k => $day)
 		{
-			switch (strlen($day))
+			if ($day)
 			{
-				case 2: $datax[$k] = Time::displayDate($k, 'jpgraph_datefmt_2'); break;
-				case 5: $datax[$k] = Time::displayDate($k, 'jpgraph_datefmt_5'); break;
-				case 10: $datax[$k] = Time::displayDate($k, 'jpgraph_datefmt_10'); break;
+				$datax[$k] = Time::displayDate($k, 'jpgraph_datefmt_'.strlen($day));
 			}
 		}
 		

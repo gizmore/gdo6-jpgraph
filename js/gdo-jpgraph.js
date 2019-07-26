@@ -26,33 +26,40 @@ window.GDO.JPGraph = {
 	renderImageFor: function(form) {
 		console.log('GDO.JPGraph.renderImageFor()', form);
 		
-		var sel = form.find('select');
-
 		var img = form.find('img');
-		var src = img.attr('src');
+		var sel = form.find('select');
 		var start = form.find('input[name=start]');
-		var newStart = "start="+start.val();
 		var end = form.find('input[name=end]');
-		var newEnd = "end="+end.val();
-		var newDate = "date="+sel.val();
+		
+		this._renderImage(img, sel.val(), start.val(), end.val());
+	},
+	
+	_renderImage: function(img, date, start, end) {
+		console.log('GDO.JPGraph._renderImage()', img, date, start, end);
+		
+		var src = img.attr('src');
+		var newDate = "date="+date;
+		var newStart = "start="+start;
+		var newEnd = "end="+end;
 		src = src.replace(/date=[^&]*/, newDate);
 		src = src.replace(/start=[^&]*/, newStart);
 		src = src.replace(/end=[^&]*/, newEnd);
 		src = src.replace(/&t=[0-9]+/, '') + '&t='+(new Date().getTime());
 		
 		// Invalid custom date abort
-		if (sel.val() === 'custom') {
-			if ( (!start.val()) || (!end.val()) ) {
+		if (date === 'custom') {
+			if ( (!start) || (!end) ) {
 				return;
 			}
 		}
 		
 		// Please select abort
-		if (sel.val() === '0') {
+		if (date === '0') {
 			return;
 		}
+		
+		console.log(img, src);
 
-		console.log(src);
 		img.attr('src', src);
 	},
 	

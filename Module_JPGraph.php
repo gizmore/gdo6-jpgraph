@@ -2,16 +2,27 @@
 namespace GDO\JPGraph;
 
 use GDO\Core\GDO_Module;
+use GDO\DB\GDT_UInt;
 
 /**
- * This module provides JpGraph for gdo6 applications.
- * So far only ROOT_PATH needs to be adjusted to the module's root folder, and an own autoloader has been implemented.
+ * This module provides JPGraph for gdo6 applications.
+ * So far only jpgraph's ROOT_PATH needs to be adjusted to the module's root folder, and an own autoloader has been implemented.
  * @version 6.09
  * @since 6.09
  * @author gizmore
  */
 final class Module_JPGraph extends GDO_Module
 {
+	public function getConfig()
+	{
+		return array(
+			GDT_UInt::make('jpgraph_default_width')->initial('480'),
+			GDT_UInt::make('jpgraph_default_height')->initial('320'),
+		);
+	}
+	public function cfgDefaultWidth() { return $this->getConfigVar('jpgraph_default_width'); }
+	public function cfgDefaultHeight() { return $this->getConfigVar('jpgraph_default_height'); }
+	
 	/**
 	 * Define jpGraph ROOT_PATH on init.
 	 * {@inheritDoc}
@@ -48,7 +59,10 @@ final class Module_JPGraph extends GDO_Module
 	
 	public function onIncludeScripts()
 	{
-		$this->addJavascript('js/gdo-jpgraph.js');
+		if (module_enabled('JQuery'))
+		{
+			$this->addJavascript('js/gdo-jpgraph.js');
+		}
 	}
 
 }

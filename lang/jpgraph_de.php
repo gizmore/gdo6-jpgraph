@@ -20,4 +20,6 @@ return array(
 'jpgraphsel_last_month' => 'Letzter Monat',
 'jpgraphsel_this_quartal' => 'Dieses Quartal',
 'jpgraphsel_last_quartal' => 'Letztes Quartal',
+'jpgraphsel_this_year' => 'Dieses Jahr',
+'jpgraphsel_last_year' => 'Letztes Jahr',
 );
