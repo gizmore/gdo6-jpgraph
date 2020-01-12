@@ -20,7 +20,7 @@ final class GDT_GraphDateselect extends GDT_Select
 {
 	public function initChoices()
 	{
-		$this->emptyLabel(t('jpgraphsel_0'));
+		$this->emptyLabel('jpgraphsel_0');
 		
 		$choices = array();
 		$choices['custom'] = t('jpgraphsel_custom');
