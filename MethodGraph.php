@@ -10,6 +10,7 @@ use Amenadiel\JpGraph\Graph\Graph;
 use Amenadiel\JpGraph\Text\Text;
 use Amenadiel\JpGraph\Plot\LinePlot;
 use GDO\Util\Strings;
+use GDO\Core\Application;
 
 /**
  * Render a graph.
@@ -28,7 +29,7 @@ abstract class MethodGraph extends Method
 			GDT_UInt::make('width')->min(48)->max(1024)->initial($this->defaultWidth()),
 			GDT_UInt::make('height')->min(32)->max(1024)->initial($this->defaultHeight()),
 			GDT_GraphDateselect::make('date')->initial('7days'),
-			GDT_DateTime::make('start')->initial(Time::getDate(time()-Time::ONE_WEEK)),
+			GDT_DateTime::make('start')->initial(Time::getDate(Application::$TIME-Time::ONE_WEEK)),
 			GDT_DateTime::make('end')->initial(Time::getDate()),
 		);
 	}

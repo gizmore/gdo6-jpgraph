@@ -2,6 +2,7 @@
 namespace GDO\JPGraph;
 
 use GDO\Form\GDT_Select;
+use GDO\Core\Application;
 use GDO\Date\Time;
 
 /**
@@ -147,7 +148,7 @@ final class GDT_GraphDateselect extends GDT_Select
 	
 	public function getEndTime()
 	{
-		$now = time();
+	    $now = Application::$TIME;
 		
 		switch ($this->getValue())
 		{
