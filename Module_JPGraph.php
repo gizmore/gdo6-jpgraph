@@ -13,6 +13,8 @@ use GDO\DB\GDT_UInt;
  */
 final class Module_JPGraph extends GDO_Module
 {
+    public function thirdPartyFolders() { return ['/jpgraph/']; }
+    
 	public function getConfig()
 	{
 		return array(
