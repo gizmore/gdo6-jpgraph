@@ -2,6 +2,7 @@
 namespace GDO\JPGraph;
 
 use GDO\Core\GDO_Module;
+use GDO\Core\GDT_Array;
 use GDO\DB\GDT_UInt;
 
 /**
@@ -65,6 +66,12 @@ final class Module_JPGraph extends GDO_Module
 		{
 			$this->addJavascript('js/gdo-jpgraph.js');
 		}
+	}
+
+	public function hookIgnoreDocsFiles(GDT_Array $ignore)
+	{
+	    $ignore->data[] = 'GDO/JPGraph/jpgraph/**/*';
+	    $ignore->data[] = 'GDO/JPGraph/vendor/**/*';
 	}
 
 }
