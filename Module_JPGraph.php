@@ -64,7 +64,7 @@ final class Module_JPGraph extends GDO_Module
 	{
 		if (module_enabled('JQuery'))
 		{
-			$this->addJavascript('js/gdo-jpgraph.js');
+			$this->addJS('js/gdo-jpgraph.js');
 		}
 	}
 
